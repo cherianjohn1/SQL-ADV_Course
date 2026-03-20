@@ -324,3 +324,24 @@ WHERE
 	AND ps.Ward = 'Dermatology'
 ORDER BY
 	ps.AdmittedDate;
+
+
+	;WITH cte AS
+    (
+        SELECT
+            ps.AdmittedDate    
+            ,COUNT(*) AS NumberOfPatientsEachDay
+            ,SUM(ps.Tariff) AS TotalTariffEachDay
+        FROM PatientStay ps
+        GROUP BY ps.AdmittedDate
+    ),
+    cte2 AS (select * from cte)
+SELECT
+    cte2.AdmittedDate    
+    ,cte2.NumberOfPatientsEachDay
+    ,cte2.TotalTariffEachDay
+    ,SUM(cte2.TotalTariffEachDay) OVER (ORDER BY cte2.AdmittedDate) AS RunningTariff
+    ,SUM(cte2.NumberOfPatientsEachDay) OVER (ORDER BY cte2.AdmittedDate) AS CumulativePatients
+FROM cte2
+where cte2.AdmittedDate >= '2024-03-01'
+ORDER BY cte2.AdmittedDate
