@@ -9,7 +9,7 @@ Comments can also be across several lines
 SQL does not care about white space or capitalisation but you should!
 */
 -- simplest statement, bring back all data from a table
-SELECT 
+SELECT
 	*
 FROM
 	PatientStay;
@@ -18,7 +18,8 @@ FROM
 Rather than * to select all columns, choose the columns you want
 */
 SELECT
-	PatientId
+	AdmittedDate
+	, PatientId
 	, Tariff
 	, Ward
 	, Hospital
@@ -74,7 +75,7 @@ FROM
 	PatientStay ps
 WHERE
 	ps.Hospital IN ('Kingston', 'PRUH');
-	--WHERE ps.Hospital LIKE 'Kin%'
+--WHERE ps.Hospital LIKE 'Kin%'
 
 /*
 Sort: by the values of one or more columns with the ORDER BY clause
@@ -131,7 +132,7 @@ Aggregate is to get a single result from a set of numbers
 Aggregation functions include SUM() and COUNT(*) but also MIN(), MAX(), AVERAGE()..
 We can group by at whatever level of aggregation we need and calculate several aggregations
 */
-	
+
 -- Aggregate over the entire dataset
 SELECT
 	COUNT(*) AS NumberOfPatients
@@ -193,7 +194,7 @@ SELECT
 	*
 FROM
 	PatientStay ps
-JOIN DimHospital h ON
+	JOIN DimHospital h ON
 	ps.Hospital = h.Hospital;
 
 /*
@@ -205,7 +206,8 @@ SELECT
 	, ps.AdmittedDate
 	, h.HospitalType
 	, h.HospitalSize
+	, ps.Hospital
 FROM
 	PatientStay ps
-JOIN DimHospital h ON
+	left JOIN DimHospitalBad h ON
 	ps.Hospital = h.Hospital;
